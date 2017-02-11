@@ -1,4 +1,4 @@
-columns: [
+var columns = [
     {
         top: [false, false],
         bottom: [false, false, false, false, false]
