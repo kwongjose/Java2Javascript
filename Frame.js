@@ -87,6 +87,7 @@
                 }
             }
         }
+        canvas.deactivateAll().renderAll();
     } //end starting
 
     //makes beads stay in bounds
