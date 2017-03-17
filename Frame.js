@@ -40,7 +40,9 @@
 
     var load = function () {
         canvas = new fabric.Canvas("myCanvas");
-
+        //pos lable
+        var lable = document.getElementById("Value");
+        lable.style.paddingLeft = "1000px";
 
 
 
@@ -85,42 +87,8 @@
 
     var Starting = function (evt) {
         var obj = evt.target;
-        console.log("Starting " + obj.place);
         moveAll(obj.column, obj.place, obj.level);
-      /*  if (!obj.clicked) { //has not been clicked
-            if (!obj.level) { //bottom bead
-                moveAll(obj.column, obj.idx, obj.level);
 
-            } else { //Top Bead
-                if (!columns[obj.column].top[obj.place]) {
-                    if (obj.place < 1) {
-                        //TODO:: MOVE BOTH BEADS DOWN
-                    } else {
-                        //TODO:: Move clicked bead
-                    }
-                }
-            }
-
-        } //end !clicked
-        else if (obj.clicked) { //clicked is true
-            if (!obj.level) { //bottom level
-                if (columns[obj.column].bottom[obj.place]) {
-                    if (obj.place > 0) {
-                        //TODO:: Move all beads from obj.place to 0 down
-                    } else {
-                        //TODO:: Move last bead down
-                    }
-                } else if (obj.level) { //Top level
-                    if (columns[obj.column].top[obj.place]) {
-                        if (obj.place > 0) {
-                            //TODO:: move all beads 
-                        } else {
-                            //TODO:: Moved clicked beads
-                        }
-                    }
-                }
-            }
-        }*/
         canvas.deactivateAll().renderAll();
     } //end starting
 
@@ -152,8 +120,6 @@
 
     var moveHandler = function (evt) {
         var moving = evt.target;
-        console.log(moving.top + "left: " + moving.left + "W: " + moving.type);
-        //console.log(moving.getOriginY() + "X: " + moving.getOriginX() + "SX: " + moving.getScaleX() + "SY: " + moving.getScaleY());
 
     }
 
@@ -201,7 +167,6 @@
                     vert_Scal += 40;
                     tb++;
                     beadCol[i].top.push(beads);//add bead to beadcold
-                    console.log(beadCol[i].top[tb-1].level + ":" + beads + i);
                     canvas.add(beads);
                 }
             }
@@ -250,27 +215,26 @@
                     b => b.clicked).filter(b => b.place <= idx);
                 for (var i = 0; i < toMove.length; i++) {
                     toMove[i].clicked = !toMove[i].clicked;
-                    animator(toMove[i], false, 56.5); 
+                    animator(toMove[i], false, 56.5);
                 }
             }
             else {//move down
                 var toMove = beadCol[colbeads].top.filter(
                                     b => !b.clicked).filter(b => b.place >= idx);
-                console.log(toMove.length);
+               
                 for (var i = 0; i < toMove.length; i++) {
                     toMove[i].clicked = !toMove[i].clicked;
-                    animator(toMove[i], true, 56.5); 
+                    animator(toMove[i], true, 56.5);
                 }
             }
         }
         else {//move bottom beads
-            console.log("here");
             if (!beadCol[colbeads].bottom[idx].clicked) {//move beads up
                 var toMove = beadCol[colbeads].bottom.filter(
                    b => !b.clicked).filter(b => b.place >= idx);
                 for (var i = 0; i < toMove.length; i++) {
                     toMove[i].clicked = !toMove[i].clicked;
-                    animator(toMove[i], false, 79.5); 
+                    animator(toMove[i], false, 79.5);
                 }
             }
             else {//move beads down
@@ -283,16 +247,37 @@
             }
         }
 
-        
+        calculate();
+
+
     }
     var animator = function (bead, up, scale) {//move  beads
-        console.log("TEST");
+        
         bead.animate('top', bead.top + (up ? 1 : -1) * scale, {
             duration: 500,
             onChange: canvas.renderAll.bind(canvas)
         });
-    }//end moveALL
+    }
+    var calculate = function () {
+        var total = 0;
+        for (var i = 0; i < 8; i++) {//loop coloumns
 
+            for (var top = 0; top < 2; top++) {//check top beads
+              //  console.log(beadCol[i].top[top].clicked + i);
+                if (beadCol[i].top[top].clicked) {
+                    var temp = Math.pow(10, 7 - i);
+                    total += temp * 5;
+                }
+            }
+            for (var bottom = 0; bottom < 5; bottom++) {
+                if (beadCol[i].bottom[bottom].clicked) {
+                    total += Math.pow(10, 7 - i);
+                }
+            }
+        }//end for
+        var tLable = document.getElementById("Value");
+        tLable.textContent = total;
+    }
     load();
 
 

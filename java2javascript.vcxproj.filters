@@ -18,5 +18,6 @@
     <None Include="abacuspage.html" />
     <None Include="calculate.js" />
     <None Include="Frame.js" />
+    <None Include="StyleSheet.css" />
   </ItemGroup>
 </Project>
