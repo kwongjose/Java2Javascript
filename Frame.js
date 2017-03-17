@@ -3,8 +3,46 @@
     var TBrec;
     var canvas;
     var sel;
+    var beadCol = [
+    {
+        top: [],
+        bottom: []
+    },
+    {
+        top: [],
+        bottom: []
+    },
+    {
+        top: [],
+        bottom: []
+    },
+    {
+        top: [],
+        bottom: []
+    },
+    {
+        top: [],
+        bottom: []
+    },
+    {
+        top: [],
+        bottom: []
+    },
+    {
+        top: [],
+        bottom: []
+    },
+    {
+        top: [],
+        bottom: []
+    }
+    ]
+
     var load = function () {
         canvas = new fabric.Canvas("myCanvas");
+
+
+
 
         var x = 110;
         for (var i = 0; i < 8; i++) {
@@ -18,7 +56,7 @@
             width: 989,
             height: 280,
             left: 6,
-            top: 172,
+            top: 171,
             selectable: false,
             fill: 'rgba(0,0,0,0)',
             stroke: "black"
@@ -48,15 +86,11 @@
     var Starting = function (evt) {
         var obj = evt.target;
         console.log("Starting " + obj.place);
-        if (!obj.clicked) { //has not been clicked
+        moveAll(obj.column, obj.place, obj.level);
+      /*  if (!obj.clicked) { //has not been clicked
             if (!obj.level) { //bottom bead
-                if (!columns[obj.column].bottom[obj.place]) { //value on calculate is false
-                    if (obj.place < 4) {
-                        //TODO:: Move the cliked bead and all beads ahead of it up.
-                    } else {
-                        //TODO:: move clicked bead up
-                    }
-                }
+                moveAll(obj.column, obj.idx, obj.level);
+
             } else { //Top Bead
                 if (!columns[obj.column].top[obj.place]) {
                     if (obj.place < 1) {
@@ -86,7 +120,7 @@
                     }
                 }
             }
-        }
+        }*/
         canvas.deactivateAll().renderAll();
     } //end starting
 
@@ -149,8 +183,9 @@
                     beads.level = false;
                     beads.lockMovementX = true;
                     beads.place = t;
+                    vertic_Scal -= 40;
+                    beadCol[i].bottom.push(beads);
                     canvas.add(beads);
-                    vertic_Scal -= 41;
                 } else { //make top beads
                     var beads = new fabric.Circle({
                         top: vert_Scal,
@@ -163,9 +198,11 @@
                     beads.clicked = false;
                     beads.lockMovementX = true;
                     beads.place = tb;
-                    canvas.add(beads);
-                    vert_Scal += 41;
+                    vert_Scal += 40;
                     tb++;
+                    beadCol[i].top.push(beads);//add bead to beadcold
+                    console.log(beadCol[i].top[tb-1].level + ":" + beads + i);
+                    canvas.add(beads);
                 }
             }
             left_Scal += 110; //move to next col
@@ -205,5 +242,59 @@
         }
     }
 
+    var moveAll = function (colbeads, idx, level) {//true = top
+        if (level) {
+            if (beadCol[colbeads].top[idx].clicked) {//move bead up
+                //get list of clicked beads behind supplied
+                var toMove = beadCol[colbeads].top.filter(
+                    b => b.clicked).filter(b => b.place <= idx);
+                for (var i = 0; i < toMove.length; i++) {
+                    toMove[i].clicked = !toMove[i].clicked;
+                    animator(toMove[i], false, 56.5); 
+                }
+            }
+            else {//move down
+                var toMove = beadCol[colbeads].top.filter(
+                                    b => !b.clicked).filter(b => b.place >= idx);
+                console.log(toMove.length);
+                for (var i = 0; i < toMove.length; i++) {
+                    toMove[i].clicked = !toMove[i].clicked;
+                    animator(toMove[i], true, 56.5); 
+                }
+            }
+        }
+        else {//move bottom beads
+            console.log("here");
+            if (!beadCol[colbeads].bottom[idx].clicked) {//move beads up
+                var toMove = beadCol[colbeads].bottom.filter(
+                   b => !b.clicked).filter(b => b.place >= idx);
+                for (var i = 0; i < toMove.length; i++) {
+                    toMove[i].clicked = !toMove[i].clicked;
+                    animator(toMove[i], false, 79.5); 
+                }
+            }
+            else {//move beads down
+                var toMove = beadCol[colbeads].bottom.filter(
+                   b => b.clicked).filter(b => b.place <= idx);
+                for (var i = 0; i < toMove.length; i++) {
+                    toMove[i].clicked = !toMove[i].clicked;
+                    animator(toMove[i], true, 79.5);
+                }
+            }
+        }
+
+        
+    }
+    var animator = function (bead, up, scale) {//move  beads
+        console.log("TEST");
+        bead.animate('top', bead.top + (up ? 1 : -1) * scale, {
+            duration: 500,
+            onChange: canvas.renderAll.bind(canvas)
+        });
+    }//end moveALL
+
     load();
+
+
+
 };

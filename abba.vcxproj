@@ -19,7 +19,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectGuid>{1C00B8D1-2308-4848-9C2B-38FE396C4E1A}</ProjectGuid>
+    <ProjectGuid>{7C46AC60-6A5B-40D3-8ABB-C82DD65E0D57}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
@@ -99,6 +99,7 @@
   <ItemGroup>
     <None Include="abacuspage.html" />
     <None Include="calculate.js" />
+    <None Include="ClassDiagram.cd" />
     <None Include="Frame.js" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
