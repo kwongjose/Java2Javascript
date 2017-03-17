@@ -148,6 +148,7 @@
                     beads.clicked = false;
                     beads.level = false;
                     beads.lockMovementX = true;
+                    beads.lockMovementY = true;
                     beads.place = t;
                     vertic_Scal -= 40;
                     beadCol[i].bottom.push(beads);
@@ -163,6 +164,7 @@
                     beads.level = true;
                     beads.clicked = false;
                     beads.lockMovementX = true;
+                    beads.lockMovementY = true;
                     beads.place = tb;
                     vert_Scal += 40;
                     tb++;
