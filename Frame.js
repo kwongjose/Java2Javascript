@@ -88,10 +88,17 @@
 
     var Starting = function (evt) {
         var obj = evt.target;
-        moveAll(obj.column, obj.place, obj.level);
+        obj.selectable = false;
+        moveAll(obj.column, obj.place, obj.level, obj);//TEST HERE
+       
 
         canvas.deactivateAll().renderAll();
+        window.setTimeout(function wait() {
+            obj.selectable = true;
+        }, 1000);
     } //end starting
+
+  
 
     //makes beads stay in bounds
     var checkBounds = function (evt) {
@@ -208,7 +215,7 @@
         }
     }
 
-    var moveAll = function (colbeads, idx, level) {//true = top
+    var moveAll = function (colbeads, idx, level, obj) {//true = top
         if (level) {
             if (beadCol[colbeads].top[idx].clicked) {//move bead up
                 //get list of clicked beads behind supplied
@@ -250,7 +257,6 @@
 
         calculate();
 
-
     }
     var animator = function (bead, up, scale) {//move  beads
         
@@ -279,6 +285,14 @@
         }//end for
         var tLable = document.getElementById("Value");
         tLable.textContent = total;
+    }
+
+    function wait(ms) {
+        var start = new Date().getTime();
+        var end = start;
+        while (end < start + ms) {
+            end = new Date().getTime();
+        }
     }
     load();
 
