@@ -43,20 +43,21 @@
         //pos lable
         var lable = document.getElementById("Value");
         lable.style.paddingLeft = "1000px";
+        var mycan = document.getElementById("myCanvas");
 
 
 
-        var x = 110;
+        var x = .08 * window.innerWidth;
         for (var i = 0; i < 8; i++) {
             var nLines = makeLines(x);
             nLines.selectable = false;
-            x += 110;
+            x += .08 * window.innerWidth;
             canvas.add(nLines);
         }
         //bottom box
         Brec = new fabric.Rect({
-            width: 989,
-            height: 280,
+            width: .72 * window.innerWidth,
+            height: .43 * window.inn
             left: 6,
             top: 171,
             selectable: false,
