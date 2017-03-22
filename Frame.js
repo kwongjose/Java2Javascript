@@ -1,4 +1,5 @@
-﻿var AbacusView = function (model, canvas) {
+﻿
+var AbacusView = function (height, width) {
     var Brec;
     var TBrec;
     var canvas;
@@ -37,29 +38,31 @@
         bottom: []
     }
     ]
+  
 
     var load = function () {
         canvas = new fabric.Canvas("myCanvas");
         //pos lable
         var lable = document.getElementById("Value");
-        lable.style.paddingLeft = "1000px";
         var mycan = document.getElementById("myCanvas");
-
-
+        canvas.setWidth( width);
+        canvas.setHeight( height);
+        
+       
 
         var x = .08 * window.innerWidth;
         for (var i = 0; i < 8; i++) {
             var nLines = makeLines(x);
             nLines.selectable = false;
-            x += .08 * window.innerWidth;
+            x += .08 * width;
             canvas.add(nLines);
         }
         //bottom box
         Brec = new fabric.Rect({
-            width: .72 * window.innerWidth,
-            height: .43 * window.inn
+            width: .72 * canvas.width,
+            height: .56 * canvas.height,
             left: 6,
-            top: 171,
+            top: (171 / canvas.height)*canvas.height,
             selectable: false,
             fill: 'rgba(0,0,0,0)',
             stroke: "black"
@@ -68,10 +71,10 @@
         Brec.lockMovementY = true;
         canvas.add(Brec);
         TBrec = new fabric.Rect({
-            width: 989,
-            height: 138,
-            left: 6,
-            top: 32,
+            width: .72 * canvas.width,
+            height: .287 * canvas.height,
+            left: (6 / canvas.width)*canvas.width,
+            top: (32 / canvas.height) * canvas.height,
             selectable: false,
             fill: 'rgba(0,0,0,0',
             stroke: "black"
@@ -88,8 +91,11 @@
 
     var Starting = function (evt) {
         var obj = evt.target;
+        obj.selectable = false;
         moveAll(obj.column, obj.place, obj.level);
-
+       window.setTimeout(function wait() {
+            obj.selectable = true;
+        }, 1000);
         canvas.deactivateAll().renderAll();
     } //end starting
 
@@ -119,22 +125,21 @@
         } //end if
     }
 
-    var moveHandler = function (evt) {
-        var moving = evt.target;
-
-    }
+    
 
     //makes lines for abacus
     var makeLines = function (xCord) {
-        var Lines = new fabric.Line([xCord, 32, xCord, 450], {
+        var xTop = (32 / height) * height;
+        var xBot = (450 / height) * height;
+        var Lines = new fabric.Line([xCord, xTop, xCord, xBot], {
             stroke: "black"
         });
         return Lines;
     }
     var makeBeads = function (canvas) {
-        var left_Scal = 89;
-        var vertic_Scal = 411; //for bottom
-        var vert_Scal = 33; //for top
+        var left_Scal = (89 / canvas.width)*canvas.width;
+        var vertic_Scal = (411 / canvas.height)*canvas.height; //for bottom
+        var vert_Scal = (33 / canvas.height)*canvas.height; //for top
         for (var i = 0; i < 8; i++) {
             var tb = 0; //top bead 
             for (var t = 0; t < 7; t++) {
@@ -142,7 +147,7 @@
                     var beads = new fabric.Circle({
                         top: vertic_Scal,
                         left: left_Scal,
-                        radius: 20,
+                        radius: (20/ canvas.width)*canvas.width,
                         fill: "red"
                     });
                     beads.column = i;
@@ -151,14 +156,14 @@
                     beads.lockMovementX = true;
                     beads.lockMovementY = true;
                     beads.place = t;
-                    vertic_Scal -= 40;
+                    vertic_Scal -= (40 / canvas.height)*canvas.height;
                     beadCol[i].bottom.push(beads);
                     canvas.add(beads);
                 } else { //make top beads
                     var beads = new fabric.Circle({
                         top: vert_Scal,
                         left: left_Scal,
-                        radius: 20,
+                        radius: (20/ canvas.width)*canvas.width,
                         fill: "red"
                     });
                     beads.column = i;
@@ -167,15 +172,15 @@
                     beads.lockMovementX = true;
                     beads.lockMovementY = true;
                     beads.place = tb;
-                    vert_Scal += 40;
+                    vert_Scal += (40 / canvas.height) * canvas.height;
                     tb++;
                     beadCol[i].top.push(beads);//add bead to beadcold
                     canvas.add(beads);
                 }
             }
-            left_Scal += 110; //move to next col
-            vertic_Scal = 411; //location of top first bead on the bottom
-            vert_Scal = 33; //location of the first bead on top
+            left_Scal += (109.4 / canvas.width)*canvas.width; //move to next col
+            vertic_Scal = (411 / canvas.height) * canvas.height; //location of top first bead on the bottom
+            vert_Scal = (33 / canvas.height)*canvas.height; //location of the first bead on top
         }
     }
 
@@ -211,6 +216,7 @@
     }
 
     var moveAll = function (colbeads, idx, level) {//true = top
+        var TopMoveOffset = (56.5 / canvas.height) * canvas.height;
         if (level) {
             if (beadCol[colbeads].top[idx].clicked) {//move bead up
                 //get list of clicked beads behind supplied
@@ -218,7 +224,7 @@
                     b => b.clicked).filter(b => b.place <= idx);
                 for (var i = 0; i < toMove.length; i++) {
                     toMove[i].clicked = !toMove[i].clicked;
-                    animator(toMove[i], false, 56.5);
+                    animator(toMove[i], false, TopMoveOffset);
                 }
             }
             else {//move down
@@ -227,17 +233,18 @@
                
                 for (var i = 0; i < toMove.length; i++) {
                     toMove[i].clicked = !toMove[i].clicked;
-                    animator(toMove[i], true, 56.5);
+                    animator(toMove[i], true, TopMoveOffset);
                 }
             }
         }
         else {//move bottom beads
+            var moveOffset = (79.4 / canvas.height)*canvas.height;
             if (!beadCol[colbeads].bottom[idx].clicked) {//move beads up
                 var toMove = beadCol[colbeads].bottom.filter(
                    b => !b.clicked).filter(b => b.place >= idx);
                 for (var i = 0; i < toMove.length; i++) {
                     toMove[i].clicked = !toMove[i].clicked;
-                    animator(toMove[i], false, 79.5);
+                    animator(toMove[i], false, moveOffset);
                 }
             }
             else {//move beads down
@@ -245,7 +252,7 @@
                    b => b.clicked).filter(b => b.place <= idx);
                 for (var i = 0; i < toMove.length; i++) {
                     toMove[i].clicked = !toMove[i].clicked;
-                    animator(toMove[i], true, 79.5);
+                    animator(toMove[i], true, moveOffset);
                 }
             }
         }
