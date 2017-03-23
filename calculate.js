@@ -39,10 +39,10 @@ var columns = [
 **/
 var flipBead = function (col, lev, place) {
     if (lev) {//true if top
-        columns[c].top[place] = !columns[c].top[place];
+        columns[col].top[place] = !columns[col].top[place];
     }
     else {
-        columns[c].bottom[place] = !columns[c].bottom[place];
+        columns[col].bottom[place] = !columns[col].bottom[place];
     }
     
 };

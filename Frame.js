@@ -46,20 +46,26 @@
     }
 
     var Starting = function (evt) {
+        canvas.deactivateAll();
         var obj = evt.target;
         console.log("Starting " + obj.place);
         if (!obj.clicked) { //has not been clicked
             if (!obj.level) { //bottom bead
                 if (!columns[obj.column].bottom[obj.place]) { //value on calculate is false
-                    if (obj.place < 4) {
+                    //THIS MIGHT BE SIMPLIFIED USING A ANIMATE FUNCTION THAT MOVES ALL NON MOVED BEADS
+                    if (obj.place < 4 && !columns[obj.column].bottom[obj.place+1] ) {
                         //TODO:: Move the cliked bead and all beads ahead of it up.
                     } else {
                         //TODO:: move clicked bead up
+                        console.log("<4");
+                        obj.setTop(obj.top - 69).setCoords();
+                        obj.clicked = !obj.clicked;
+                        flipBead(obj.column, obj.level, obj.place);
                     }
                 }
             } else { //Top Bead
                 if (!columns[obj.column].top[obj.place]) {
-                    if (obj.place < 1) {
+                    if (obj.place < 1 && !columns[obj.column].top[obj.place+1] ) {
                         //TODO:: MOVE BOTH BEADS DOWN
                     } else {
                         //TODO:: Move clicked bead
@@ -71,14 +77,18 @@
         else if (obj.clicked) { //clicked is true
             if (!obj.level) { //bottom level
                 if (columns[obj.column].bottom[obj.place]) {
-                    if (obj.place > 0) {
+                    if (obj.place > 0 && columns[obj.column].bottom[obj.place-1] ) {
                         //TODO:: Move all beads from obj.place to 0 down
                     } else {
                         //TODO:: Move last bead down
+                        console.log("<4 down");
+                        obj.setTop(obj.top + 68).setCoords();
+                        obj.clicked = !obj.clicked;
+                        flipBead(obj.column, obj.level, obj.place);
                     }
                 } else if (obj.level) { //Top level
                     if (columns[obj.column].top[obj.place]) {
-                        if (obj.place > 0) {
+                        if (obj.place > 0 && columns[obj.column].top[0] ) {
                             //TODO:: move all beads 
                         } else {
                             //TODO:: Moved clicked beads
@@ -87,10 +97,24 @@
                 }
             }
         }
-        canvas.deactivateAll().renderAll();
+        canvas.renderAll();
+        intersectingCheck(obj);
+        //canvas.deactivateAll().renderAll();
     } //end starting
 
-    //makes beads stay in bounds
+    var group_objects_up = new function (place, col, level) {
+        var list = [];
+        if (level) {
+           
+        }
+        else {//bottom bead
+            for (var i = place; i <= 4; i++) {//move all unmoved beads into group
+                
+            }
+        }
+    }
+
+    //makes beads stay in boundsv
     var checkBounds = function (evt) {
         var obj_type = evt.target;
         if (obj_type.isType('circle')) {
@@ -207,3 +231,38 @@
 
     load();
 };
+
+var bead_Cols = [
+    {
+        top: [],
+        bottom: []
+    },
+    {
+        top: [],
+        bottom: []
+    },
+    {
+        top: [],
+        bottom: []
+    },
+    {
+        top: [],
+        bottom: []
+    },
+    {
+        top: [],
+        bottom: []
+    },
+    {
+        top: [],
+        bottom: []
+    },
+    {
+        top: [],
+        bottom: []
+    },
+    {
+        top: [],
+        bottom: []
+    }
+]
