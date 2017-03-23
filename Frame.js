@@ -56,8 +56,8 @@
         }
         //bottom box
         Brec = new fabric.Rect({
-            width: .72 * window.innerWidth,
-            height: .43 * window.inn
+            width: 989,
+            height: 280,
             left: 6,
             top: 171,
             selectable: false,
@@ -171,7 +171,7 @@
                     canvas.add(beads);
                 }
             }
-            left_Scal += 110; //move to next col
+            left_Scal += 109.5; //move to next col
             vertic_Scal = 411; //location of top first bead on the bottom
             vert_Scal = 33; //location of the first bead on top
         }
@@ -259,6 +259,7 @@
             onChange: canvas.renderAll.bind(canvas)
         });
     }
+
     var calculate = function () {
         var total = 0;
         for (var i = 0; i < 8; i++) {//loop coloumns
