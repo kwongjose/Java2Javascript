@@ -4,25 +4,29 @@
     <script type="Text/javascript" src="fabric.js-1.7.3\dist\fabric.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
     <script type="text/javascript" src="Frame.js"></script>
-    
-    <title></title>
-	<meta charset="utf-8" />
-</head>
-<body onload="AbacusView()" >
-    <canvas id="myCanvas" width="10" height="40" ></canvas>
-    <font size="15">
-        <label id="Value"  width="100" height="50" >0</label>
-    </font>
    
 
+    <title></title>
+    <meta charset="utf-8" />
+</head>
+<body onload="AbacusView()" >
+    <div id="canvasDiv">
+        <canvas id="myCanvas" width="10" height="30"></canvas>
+        <font size="15">
+            <label id="Value" width="100" height="50">0</label>
+        </font>
+    </div>
+    <div id="Butt" >
+        <button  onclick="setBase();">Set Base Number</button>
+        <textarea id="newBase"></textarea>
+    </div>
+
     <script>
-$(document).ready(function() {
-  var width = window.innerWidth;
-  var height = window.innerHeight;
-AbacusView(height, width);
-console.log(height + "H");
-console.log(width + "W");
-})
+        $(document).ready(function () {
+            var width = window.innerWidth;
+            var height = window.innerHeight;
+            AbacusView(height, width);
+        })
     </script>
 </body>
 </html>
